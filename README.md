@@ -1,14 +1,25 @@
-# 🐍 Inqube Snake Game
+# 🌀 Inqube Snake Game
 
-This is a web-based snake game built as part of [Inqube](https://inqube.io)'s creative tech experiments.
+Welcome to the **Inqube Snake Game** — a nostalgic classic reimagined with a neon twist.
 
-- Built with: HTML, CSS, JS
-- Inspired by: Classic Snake + Pixel Alien Aesthetic
-- Features:
-  - Neon UI
-  - Apple-eating logic
-  - Collision detection
-  - Restart system
-  - Digest animation
+🧠 Built as part of [Inqube](https://inqube.io)’s creative tech explorations, this game showcases our playful approach to interactive web experiences.
 
-[🎮 Play the game here](https://inqube123.github.io/snake/)
+## ✨ Features
+- Futuristic alien snake head with pixel art vibes
+- Glowing apple food 🧃
+- Smooth gameplay and responsive controls
+- Collision logic & animated digestion effect
+- Game Over overlay with restart functionality
+- Fully mobile responsive
+
+## 🚀 Technologies Used
+- HTML5 Canvas
+- CSS3 (with neon styling)
+- Vanilla JavaScript
+
+## 🎮 Play Now
+👉 [Launch the Game](https://inqube123.github.io/snake/)
+
+---
+
+Part of the **Inqube Experiments Series**: blending design, code, and play.
