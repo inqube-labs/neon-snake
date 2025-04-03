@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake v2</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-container">
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="game-over" class="hidden">
+      <p>Game Over!</p>
+      <button onclick="restartGame()">Restart</button>
+    </div>
+    <div id="theme-switcher">
+      <label for="themeSelect">Theme:</label>
+      <select id="themeSelect" onchange="changeTheme(this.value)">
+        <option value="neon">Neon</option>
+        <option value="matrix">Matrix</option>
+        <option value="vaporwave">Vaporwave</option>
+      </select>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
