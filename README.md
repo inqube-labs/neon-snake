@@ -1,25 +1,32 @@
-# 🌀 Inqube Snake Game
+# 🐍 Neon Snake
 
-Welcome to the **Inqube Snake Game** — a nostalgic classic reimagined with a neon twist.
+Welcome to **Neon Snake** — a pixel-perfect twist on the classic Snake game, built as part of [Inqube](https://inqube.io)'s creative tech experiments.
 
-🧠 Built as part of [Inqube](https://inqube.io)’s creative tech explorations, this game showcases our playful approach to interactive web experiences.
+## 🎮 What Makes It Special
+- 🍎 **Glowing Apple**: A redesigned food pixel with stem & shine
+- 🐍 **Alien Snake Head**: Custom-built pixel head with eyes and tongue
+- 💡 **Digest Animation**: Each body tile lights up one-by-one when food is eaten
+- 🧠 **Pixel-by-Pixel Death**: Snake disintegrates dramatically on collision
+- 🌈 **Neon UI**: Glowy canvas, custom font, subtle shadows
+- 📱 **Mobile-Friendly**: Swipe gestures to move on phones
+- 🖥️ **Keyboard Support**: Arrow keys on desktop
+- 🕹️ **Favicon & Branding**: Custom snake head icon as favicon and heading
 
-## ✨ Features
-- Futuristic alien snake head with pixel art vibes
-- Glowing apple food 🧃
-- Smooth gameplay and responsive controls
-- Collision logic & animated digestion effect
-- Game Over overlay with restart functionality
-- Fully mobile responsive
-
-## 🚀 Technologies Used
-- HTML5 Canvas
-- CSS3 (with neon styling)
+## 🛠️ Tech Stack
+- HTML5 + Canvas
+- CSS3
 - Vanilla JavaScript
 
-## 🎮 Play Now
-👉 [Launch the Game](https://inqube123.github.io/snake/)
+## 🚀 How to Play
+- Help the snake eat the glowing apple
+- Avoid crashing into the wall
+- Don’t let it eat itself
+- Swipe on mobile, use arrow keys on desktop
+
+## 🌐 Play Online
+[🔗 Launch the Game](https://inqube123.github.io/snake/)
 
 ---
 
-Part of the **Inqube Experiments Series**: blending design, code, and play.
+> This is part of Inqube’s interactive showcase.  
+> We blend tech, art, and experience — one pixel at a time.
