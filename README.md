@@ -24,7 +24,7 @@ Welcome to **Neon Snake** — a pixel-perfect twist on the classic Snake game, b
 - Swipe on mobile, use arrow keys on desktop
 
 ## 🌐 Play Online
-[🔗 Launch the Game](https://inqube123.github.io/snake/)
+[🔗 Launch the Game](https://inqube-labs.github.io/neon-snake/)
 
 ---
 
