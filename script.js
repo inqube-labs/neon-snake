@@ -8,8 +8,15 @@ let snake;
 let food;
 let score = 0;
 let gameLoop;
-let digesting = false;
-let digestIndex = 0;
+let glowIndex = 0;
+let glowActive = false;
+let nextDirection = null;
+let isDying = false;
+let deathIndex = 0;
+
+function setDirection(dir) {
+  nextDirection = dir;
+}
 
 function restartGame() {
   document.location.reload();
@@ -21,6 +28,11 @@ function setup() {
   score = 0;
   document.getElementById('score').innerText = `Score: ${score}`;
   gameLoop = window.setInterval(() => {
+    if (nextDirection && !isDying) {
+      snake.changeDirection(nextDirection);
+      nextDirection = null;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     snake.update();
     snake.draw();
@@ -29,25 +41,64 @@ function setup() {
     if (snake.eat(food)) {
       food = randomFood();
       score++;
-      digesting = true;
-      digestIndex = 0;
+      glowActive = true;
+      glowIndex = 0;
       document.getElementById('score').innerText = `Score: ${score}`;
     }
 
-    if (digesting) {
-      drawDigest();
-    }
+    if (glowActive) drawGlow();
 
-    if (snake.checkCollision()) {
-      endGame();
+    if (!isDying && snake.checkCollision()) {
+      isDying = true;
+      clearInterval(gameLoop);
+      animateDeath();
     }
   }, 150);
 }
 
+function animateDeath() {
+  const deathAnim = setInterval(() => {
+    if (deathIndex < snake.tail.length) {
+      const part = snake.tail[snake.tail.length - 1 - deathIndex];
+      ctx.clearRect(part.x, part.y, scale, scale);
+      deathIndex++;
+    } else {
+      ctx.clearRect(snake.x, snake.y, scale, scale);
+      clearInterval(deathAnim);
+      document.getElementById('game-over').classList.remove('hidden');
+    }
+  }, 100);
+}
+
+window.onload = () => {
+  setup();
+  initSwipe();
+};
+
 window.addEventListener('keydown', (evt) => {
   const direction = evt.key.replace('Arrow', '');
-  snake.changeDirection(direction);
+  nextDirection = direction;
 });
+
+function initSwipe() {
+  let startX, startY;
+  canvas.addEventListener('touchstart', (e) => {
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
+  });
+
+  canvas.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    const dy = t.clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      nextDirection = dx > 0 ? 'Right' : 'Left';
+    } else {
+      nextDirection = dy > 0 ? 'Down' : 'Up';
+    }
+  });
+}
 
 function randomFood() {
   return {
@@ -57,44 +108,29 @@ function randomFood() {
 }
 
 function drawFood(x, y) {
-  ctx.fillStyle = '#ff3c3c';
+  ctx.fillStyle = '#ff4d4d';
   ctx.beginPath();
-  ctx.moveTo(x + 10, y + 2);
-  ctx.bezierCurveTo(x + 13, y - 5, x + 17, y - 5, x + 18, y + 2);
-  ctx.bezierCurveTo(x + 22, y + 5, x + 19, y + 15, x + 10, y + 18);
-  ctx.bezierCurveTo(x + 1, y + 15, x - 2, y + 5, x + 2, y + 2);
-  ctx.bezierCurveTo(x + 3, y - 5, x + 7, y - 5, x + 10, y + 2);
+  ctx.arc(x + scale / 2, y + scale / 2, scale / 2, 0, 2 * Math.PI);
   ctx.fill();
   ctx.fillStyle = '#2ecc71';
-  ctx.fillRect(x + 8, y - 3, 4, 6);
+  ctx.fillRect(x + 8, y - 4, 4, 6);
 }
 
-function drawAlienHead(x, y) {
-  ctx.fillStyle = '#7eff2f';
-  ctx.fillRect(x, y, scale, scale);
 
-  ctx.fillStyle = 'black';
-  ctx.fillRect(x + 4, y + 6, 4, 4);
-  ctx.fillRect(x + 12, y + 6, 4, 4);
-
-  ctx.fillStyle = '#ff3c3c';
-  ctx.fillRect(x + 8, y - 8, 4, 8);
-  ctx.fillRect(x + 6, y - 10, 2, 2);
-  ctx.fillRect(x + 12, y - 10, 2, 2);
-}
-
-function drawDigest() {
-  if (digestIndex < snake.tail.length) {
-    const part = snake.tail[digestIndex];
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(part.x + scale / 2, part.y + scale / 2, 4, 0, 2 * Math.PI);
-    ctx.fill();
-    digestIndex++;
+function drawGlow() {
+  if (glowIndex < snake.tail.length) {
+    for (let i = 0; i < snake.tail.length; i++) {
+      const part = snake.tail[i];
+      ctx.fillStyle = i === glowIndex ? 'rgba(255,255,255,0.5)' : '#8800ff';
+      ctx.fillRect(part.x, part.y, scale, scale);
+    }
+    glowIndex++;
   } else {
-    digesting = false;
+    glowActive = false;
+    glowIndex = 0;
   }
 }
+
 
 function Snake() {
   this.x = 0;
@@ -107,11 +143,26 @@ function Snake() {
     for (let i = 0; i < this.tail.length; i++) {
       ctx.fillStyle = '#8800ff';
       ctx.strokeStyle = '#cc99ff';
-      ctx.lineWidth = 1;
       ctx.fillRect(this.tail[i].x, this.tail[i].y, scale, scale);
-      ctx.strokeRect(this.tail[i].x, this.tail[i].y, scale, scale);
     }
-    drawAlienHead(this.x, this.y);
+
+    const mouthOpen = Math.abs(this.x - food.x) <= scale && Math.abs(this.y - food.y) <= scale;
+    ctx.fillStyle = '#7eff2f';
+    ctx.fillRect(this.x, this.y, scale, scale);
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(this.x + 4, this.y + 6, 4, 4);
+    ctx.fillRect(this.x + 12, this.y + 6, 4, 4);
+
+    if (mouthOpen) {
+      ctx.fillStyle = '#ff3c3c';
+      ctx.fillRect(this.x + 6, this.y + 14, 8, 4);
+    }
+
+    ctx.fillStyle = '#ff3c3c';
+    ctx.fillRect(this.x + 8, this.y - 8, 4, 8);
+    ctx.fillRect(this.x + 6, this.y - 10, 2, 2);
+    ctx.fillRect(this.x + 12, this.y - 10, 2, 2);
   };
 
   this.update = function () {
@@ -168,16 +219,6 @@ function Snake() {
         return true;
       }
     }
-    if (this.x >= canvas.width || this.x < 0 || this.y >= canvas.height || this.y < 0) {
-      return true;
-    }
-    return false;
+    return this.x < 0 || this.y < 0 || this.x >= canvas.width || this.y >= canvas.height;
   };
 }
-
-function endGame() {
-  clearInterval(gameLoop);
-  document.getElementById('game-over').classList.remove('hidden');
-}
-
-setup();
